@@ -1,21 +1,10 @@
-use regex::Regex;
+#[macro_use]
+extern crate lazy_static;
 
 mod parser;
 
-enum GroupedTypes {
-  Paragraph,
-  Quote,
-  Code
-}
-
 pub fn to_html(markdown: &str) -> String {
-  let blocks = parser::parse(markdown);
-  let mut html = String::new();
-  for block in blocks {
-    html.push_str(&format!("<block>{}</block>\n", block.text));
-  }
-
-  html
+  parser::parse(markdown)
 
   /*let bold_re = Regex::new(r"\*\*(.*?)*\*\*").unwrap();
   let italic_re = Regex::new(r"\*(.*?)*\*").unwrap();
@@ -93,27 +82,6 @@ pub fn to_html(markdown: &str) -> String {
   }
 
   html*/
-}
-
-// Extend string to have begins_with function
-trait BeginsWithExt {
-  fn begins_with(&self, pattern: &str) -> bool;
-}
-impl BeginsWithExt for String {
-  fn begins_with(&self, pattern: &str) -> bool {
-    match pattern.len() > self.len() {
-      true => false,
-      false => &self[0..pattern.len()] == pattern
-    }
-  }
-}
-impl BeginsWithExt for &str {
-  fn begins_with(&self, pattern: &str) -> bool {
-    match pattern.len() > self.len() {
-      true => false,
-      false => &self[0..pattern.len()] == pattern
-    }
-  }
 }
 
 /*#[cfg(test)]
