@@ -1,5 +1,7 @@
 use regex::Regex;
 
+mod parser;
+
 enum GroupedTypes {
   Paragraph,
   Quote,
@@ -7,7 +9,15 @@ enum GroupedTypes {
 }
 
 pub fn to_html(markdown: &str) -> String {
-  let bold_re = Regex::new(r"\*\*(.*?)*\*\*").unwrap();
+  let blocks = parser::parse(markdown);
+  let mut html = String::new();
+  for block in blocks {
+    html.push_str(&format!("<block>{}</block>\n", block.text));
+  }
+
+  html
+
+  /*let bold_re = Regex::new(r"\*\*(.*?)*\*\*").unwrap();
   let italic_re = Regex::new(r"\*(.*?)*\*").unwrap();
   let strike_re = Regex::new(r"~~(.*?)~~").unwrap();
   let url_re = Regex::new(r"\[(.*?)\]\((.*?)\)").unwrap();
@@ -22,7 +32,7 @@ pub fn to_html(markdown: &str) -> String {
       GroupedTypes::Code => {
         if line.begins_with("```") {
           group_type = GroupedTypes::Paragraph;
-          html.push_str(&format!("<pre>{}</pre>", grouped));
+          html.push_str(&format!("<pre><code>{}</code></pre>", grouped));
           grouped.clear();
         } else {
           grouped.push_str(line);
@@ -82,7 +92,7 @@ pub fn to_html(markdown: &str) -> String {
     }
   }
 
-  html
+  html*/
 }
 
 // Extend string to have begins_with function
@@ -106,7 +116,7 @@ impl BeginsWithExt for &str {
   }
 }
 
-#[cfg(test)]
+/*#[cfg(test)]
 mod tests {
   use super::*;
   
@@ -127,4 +137,4 @@ mod tests {
     assert!(a.begins_with(pattern));
     assert!(!b.begins_with(pattern));
   }
-}
+}*/
