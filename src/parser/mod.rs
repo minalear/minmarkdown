@@ -143,9 +143,9 @@ fn apply_formatting(line: &str) -> String {
   }
 
   let line = BOLD.replace_all(line, "<strong>$1</strong>");
-  let line = ITALIC.replace_all(&line, "<strong>$1</strong>");
-  let line = STRIKE.replace_all(&line, "<strong>$1</strong>");
-  let line = URL.replace_all(&line, "<strong>$1</strong>");
+  let line = ITALIC.replace_all(&line, "<em>$1</em>");
+  let line = STRIKE.replace_all(&line, "<s>$1</s>");
+  let line = URL.replace_all(&line, "<a href=\"$2\">$1</a>");
  
   String::from(line)
 }
