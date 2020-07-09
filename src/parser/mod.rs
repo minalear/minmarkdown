@@ -45,10 +45,10 @@ pub fn parse(markdown: &str) -> String {
 
   // if our buffer isn't empty, push the contents into a new block
   if buffer.len() != 0 {
-    blocks.push(Block::new(buffer.clone(), BlockTypes::Raw));
+    blocks.push(parse_block(&buffer));
     buffer.clear();
   }
-  let blocks = blocks;
+  let blocks = blocks; // make immutable
 
   // generate HTML from blocks
   for block in blocks {
@@ -79,13 +79,13 @@ fn parse_block(text: &str) -> Block {
       // and not apply formatting within the code block.
       BlockTypes::Code => {
         buffer.push_str(&line);
+        buffer.push_str("\n");
       },
       _ => {
         if line.begins_with("```") {
           // Code blocks are designated with ``` before and after
           // so we don't need to parse the rest of the line
           block_type = BlockTypes::Code;
-          buffer.push_str("<pre><code>");
         } else if line.begins_with("# ") {
           block_type = BlockTypes::Header(1);
           let line = format!("<h1>{}</h1>", line.replace("# ", ""));
