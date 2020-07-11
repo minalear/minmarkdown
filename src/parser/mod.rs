@@ -126,6 +126,7 @@ fn parse_block(text: &str) -> Block {
         } else {
           block_type = BlockTypes::Paragraph;
           buffer.push_str(&apply_formatting(&line));
+          buffer.push_str(" ");
         }
       }
     }
